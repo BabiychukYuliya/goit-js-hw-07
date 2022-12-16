@@ -34,19 +34,27 @@ imagesContainer.addEventListener("click", (eve) => {
 
   const urlBigImage = eve.target.getAttribute("data-source");
 
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <img src="${urlBigImage}" width="800" height="600">
-`);
+`,
+    {
+      onShow: (instance) => {
+        document.addEventListener("keydown", (eve) => {
+          eve.preventDefault();
+          if (eve.code === "Escape") {
+            instance.close();
+          }
+        });
+      },
+      onClose: (instance) => {
+        document.removeEventListener("keydown", eve);
+      },
+    }
+  );
 
   instance.show();
 
-  // закриття по Esc
-
-  imagesContainer.addEventListener("keydown", (eve) => {
-    if (eve.code === "Escape") {
-      instance.close();
-    }
-  });
-  imagesContainer.removeEventListener("keydown", (eve));
+  //   // закриття по Esc
 });
 // console.log(basicLightbox);
